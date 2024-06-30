@@ -107,9 +107,10 @@ const onObjectMoving = (e) => {
     drawObjectGuides(obj);
 
     const objects = canvas.getObjects().filter((o) => o.type !== "line" && o !== obj);
-    const matches = new Set();
 
     for (const i of objects) {
+        const matches = [];
+
         for (const side in obj.guides) {
             let axis, newPos;
 
@@ -137,75 +138,176 @@ const onObjectMoving = (e) => {
             }
 
             if (inRange(obj.guides[side][axis], i.guides[side][axis])) {
-                matches.add(side);
-                snapObject(obj, axis, newPos);
+                matches.push({
+                    side: side,
+                    axis: axis,
+                    range: Math.abs(obj.guides[side][axis] - i.guides[side][axis]),
+                    newPos: newPos
+                });
+                // matches.add(side);
+                // snapObject(obj, axis, newPos);
             }
 
             if (side === "left") {
                 if (inRange(obj.guides["left"][axis], i.guides["right"][axis])) {
-                    matches.add(side);
-                    snapObject(obj, axis, i.guides["right"][axis]);
+                    matches.push({
+                        side: side,
+                        axis: axis,
+                        range: Math.abs(obj.guides["left"][axis] - i.guides["right"][axis]),
+                        newPos: i.guides["right"][axis]
+                    });
+                    // matches.add(side);
+                    // snapObject(obj, axis, i.guides["right"][axis]);
                 } else if(inRange(obj.guides["left"][axis], i.guides["centerX"][axis])) {
-                    matches.add(side);
-                    snapObject(obj, axis, i.guides["centerX"][axis]);
+                    matches.push({
+                        side: side,
+                        axis: axis,
+                        range: Math.abs(obj.guides["left"][axis] - i.guides["centerX"][axis]),
+                        newPos: i.guides["centerX"][axis]
+                    });
+                    // matches.add(side);
+                    // snapObject(obj, axis, i.guides["centerX"][axis]);
                 } 
             } else if (side === "right") {
                 if (inRange(obj.guides["right"][axis], i.guides["left"][axis])) {
-                    matches.add(side);
-                    snapObject(obj, axis, i.guides["left"][axis] - obj.getScaledWidth());
+                    matches.push({
+                        side: side,
+                        axis: axis,
+                        range: Math.abs(obj.guides["right"][axis] - i.guides["left"][axis]),
+                        newPos: i.guides["left"][axis] - obj.getScaledWidth()
+                    });
+                    // matches.add(side);
+                    // snapObject(obj, axis, i.guides["left"][axis] - obj.getScaledWidth());
                 } else if (inRange(obj.guides["right"][axis], i.guides["centerX"][axis])) {
-                    matches.add(side);
-                    snapObject(obj, axis, i.guides["centerX"][axis] - obj.getScaledWidth());
+                    matches.push({
+                        side: side,
+                        axis: axis,
+                        range: Math.abs(obj.guides["right"][axis] - i.guides["centerX"][axis]),
+                        newPos: i.guides["centerX"][axis] - obj.getScaledWidth()
+                    });
+                    // matches.add(side);
+                    // snapObject(obj, axis, i.guides["centerX"][axis] - obj.getScaledWidth());
                 } 
             } else if (side === "top") {
                 if (inRange(obj.guides["top"][axis], i.guides["bottom"][axis])) {
-                    matches.add(side);
-                    snapObject(obj, axis, i.guides["bottom"][axis]);
+                    matches.push({
+                        side: side,
+                        axis: axis,
+                        range: Math.abs(obj.guides["top"][axis] - i.guides["bottom"][axis]),
+                        newPos: i.guides["bottom"][axis]
+                    });
+                    // matches.add(side);
+                    // snapObject(obj, axis, i.guides["bottom"][axis]);
                 } else if (inRange(obj.guides["top"][axis], i.guides["centerY"][axis])) {
-                    matches.add(side);
-                    snapObject(obj, axis, i.guides["centerY"][axis]);
+                    matches.push({
+                        side: side,
+                        axis: axis,
+                        range: Math.abs(obj.guides["top"][axis] - i.guides["centerY"][axis]),
+                        newPos: i.guides["centerY"][axis]
+                    });
+                    // matches.add(side);
+                    // snapObject(obj, axis, i.guides["centerY"][axis]);
                 }
             } else if (side === "bottom") {
                 if (inRange(obj.guides["bottom"][axis], i.guides["top"][axis])) {
-                    matches.add(side);
-                    snapObject(obj, axis, i.guides["top"][axis] - obj.getScaledHeight());
+                    matches.push({
+                        side: side,
+                        axis: axis,
+                        range: Math.abs(obj.guides["bottom"][axis] - i.guides["top"][axis]),
+                        newPos: i.guides["top"][axis] - obj.getScaledHeight()
+                    })
+                    // matches.add(side);
+                    // snapObject(obj, axis, i.guides["top"][axis] - obj.getScaledHeight());
                 } else if (inRange(obj.guides["bottom"][axis], i.guides["centerY"][axis])) {
-                    matches.add(side);
-                    snapObject(obj, axis, i.guides["centerY"][axis] - obj.getScaledHeight());
+                    matches.push({
+                        side: side,
+                        axis: axis,
+                        range: Math.abs(obj.guides["bottom"][axis] - i.guides["centerY"][axis]),
+                        newPos: i.guides["centerY"][axis] - obj.getScaledHeight()
+                    });
+                    // matches.add(side);
+                    // snapObject(obj, axis, i.guides["centerY"][axis] - obj.getScaledHeight());
                 }
             } else if (side === "centerX") {
                 if (inRange(obj.guides["centerX"][axis], i.guides["left"][axis])) {
-                    matches.add(side);
-                    snapObject(
-                        obj,
-                        axis,
-                        i.guides["left"][axis] - obj.getScaledWidth() / 2
-                    );
+                    matches.push({
+                        side: side,
+                        axis: axis,
+                        range: Math.abs(obj.guides["centerX"][axis] - i.guides["left"][axis]),
+                        newPos: i.guides["left"][axis] - obj.getScaledWidth() / 2
+                    });
+                    // matches.add(side);
+                    // snapObject(
+                    //     obj,
+                    //     axis,
+                    //     i.guides["left"][axis] - obj.getScaledWidth() / 2
+                    // );
                 } else if (inRange(obj.guides["centerX"][axis], i.guides["right"][axis])) {
-                    matches.add(side);
-                    snapObject(
-                        obj,
-                        axis,
-                        i.guides["right"][axis] - obj.getScaledWidth() / 2
-                    );
+                    matches.push({
+                        side: side,
+                        axis: axis,
+                        range: Math.abs(obj.guides["centerX"][axis] - i.guides["right"][axis]),
+                        newPos: i.guides["right"][axis] - obj.getScaledWidth() / 2
+                    });
+                    // matches.add(side);
+                    // snapObject(
+                    //     obj,
+                    //     axis,
+                    //     i.guides["right"][axis] - obj.getScaledWidth() / 2
+                    // );
                 }
             } else if (side === "centerY") {
                 if (inRange(obj.guides["centerY"][axis], i.guides["top"][axis])) {
-                    matches.add(side);
-                    snapObject(
-                        obj,
-                        axis,
-                        i.guides["top"][axis] - obj.getScaledHeight() / 2
-                    );
+                    matches.push({
+                        side: side,
+                        axis: axis,
+                        range: Math.abs(obj.guides["centerY"][axis] - i.guides["top"][axis]),
+                        newPos: i.guides["top"][axis] - obj.getScaledHeight() / 2
+                    });
+                    // matches.add(side);
+                    // snapObject(
+                    //     obj,
+                    //     axis,
+                    //     i.guides["top"][axis] - obj.getScaledHeight() / 2
+                    // );
                 } else if (inRange(obj.guides["centerY"][axis], i.guides["bottom"][axis])) {
-                    matches.add(side);
-                    snapObject(
-                        obj,
-                        axis,
-                        i.guides["bottom"][axis] - obj.getScaledHeight() / 2
-                    );
+                    matches.push({
+                        side: side,
+                        axis: axis,
+                        range: Math.abs(obj.guides["centerY"][axis] - i.guides["bottom"][axis]),
+                        newPos: i.guides["bottom"][axis] - obj.getScaledHeight() / 2
+                    });
+                    // matches.add(side);
+                    // snapObject(
+                    //     obj,
+                    //     axis,
+                    //     i.guides["bottom"][axis] - obj.getScaledHeight() / 2
+                    // );
                 }
             }
+
+            if (matches.length === 1) {
+                snapObject(
+                    obj,
+                    matches[0].axis,
+                    matches[0].newPos
+                );
+            } else if (matches.length > 1) {
+                matches.sort((a, b) => a.range - b.range);
+
+                for(const match of matches) {
+                    snapObject(
+                        obj,
+                        match.axis,
+                        match.newPos
+                    );      
+                }
+            }
+            // snapObject(
+            //     obj,
+            //     axis,
+            //     i.guides["top"][axis] - obj.getScaledHeight() / 2
+            // );
         }
     }
 
