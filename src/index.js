@@ -12,6 +12,8 @@ const events = {
 
 const bindEvents = () => {
     canvas.on('mouse:up', onMouseUp);
+    canvas.on('mouse:down', onMouseDown);
+    canvas.on('selection:cleared', onSelectionCleared);
 
     events.object.forEach((event) => {
         if (event === "added") {
@@ -80,6 +82,30 @@ const onMouseUp = (e) => {
 
     canvas.renderAll();
 }
+
+const onMouseDown = (e) => {
+    console.log('**** onMouseDown ****', e)
+}
+
+const onSelectionCleared = (e) => {
+    console.log('**** onSelectionCleared ****', e)
+    // Clear the guides when the selection is cleared
+    const objects = canvas.getObjects().filter(o => o.type !== "line");
+    objects.forEach(obj => {
+        if (obj.guides) {
+            for (let side in obj.guides) {
+                if (obj.guides[side] instanceof fabric.Line) {
+                    canvas.remove(obj.guides[side]);
+                }
+            }
+        }
+
+        obj.guides = {};
+        drawObjectGuides(obj);
+    });
+
+    canvas.renderAll();
+};
 
 const onObjectAdded = (e) => {
     // Add the smart guides around the object
