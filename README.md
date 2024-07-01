@@ -1,4 +1,4 @@
-# fabricjs-snappy-and-alignment
+# Snapping and Alignment in Fabric.js
 Mastering Object Snapping and Alignment in Fabric.js
 
 <img src="public/fabric-snap-and-alignment.png" />
