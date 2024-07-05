@@ -2,7 +2,7 @@ import "./styles.css";
 import { fabric } from "fabric";
 
 // initialize fabric canvas and assign to global windows object for debug
-const canvas = (window._canvas = new fabric.Canvas("c"));
+const canvas = (window._canvas = new fabric.Canvas("c", { preserveObjectStacking: true }));
 
 const sides = ["left", "right", "centerX", "top", "bottom", "centerY"];
 
