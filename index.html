@@ -6,8 +6,14 @@
   </head>
 
   <body>
-    <div id="app"><canvas id="c" width="600" height="600"></canvas></div>
-
+    <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px;">
+        <div style="display: flex; align-items: center; gap: 4px;">
+          Panning: <button id="btn-panning">Start</button>
+        </div>        
+        <div id="app" style="display: flex; align-items: center; justify-content: center;">
+          <canvas id="c" width="600" height="600"></canvas>
+        </div>
+    </div>
     <script src="src/index.js"></script>
   </body>
 </html>
