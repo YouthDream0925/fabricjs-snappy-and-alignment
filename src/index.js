@@ -37,18 +37,18 @@ const createRect = (left, top, color, width, height) => {
 
 const init = () => {
     bindEvents();
-    createRect(200, 200, "rgba(0, 0, 0, 0.8)", 200, 200);
+    createRect(200, 200, "rgba(0, 0, 255, 1)", 200, 200);
     createRect(
         Math.floor(Math.random() * canvas.width),
         Math.floor(Math.random() * canvas.height),
-        "rgba(0, 255, 0, 0.6)",
+        "rgba(0, 255, 0, 1)",
         199,
         200
     );
     createRect(
         Math.floor(Math.random() * canvas.width),
         Math.floor(Math.random() * canvas.height),
-        "rgba(255, 0, 0, 0.6)",
+        "rgba(255, 0, 0, 1)",
         202,
         200
     );
@@ -249,12 +249,12 @@ const drawGuides = (obj) => {
                 ln = new fabric.Line(
                     [sortedPointArray[0], value, sortedPointArray[sortedPointArray.length - 1], value],
                     Object.assign(lineProps, {
-                        stroke: 'blue'
+                        stroke: 'black'
                     })
                 );
                 sortedPointArray.forEach(point => {
-                    marks.push(new fabric.Line([point - markSize, value - markSize, point + markSize, value + markSize],Object.assign(lineProps, { stroke: 'blue' })));
-                    marks.push(new fabric.Line([point - markSize, value + markSize, point + markSize, value - markSize],Object.assign(lineProps, { stroke: 'blue' })));
+                    marks.push(new fabric.Line([point - markSize, value - markSize, point + markSize, value + markSize],Object.assign(lineProps, { stroke: 'black' })));
+                    marks.push(new fabric.Line([point - markSize, value + markSize, point + markSize, value - markSize],Object.assign(lineProps, { stroke: 'black' })));
                 });  
                 break;
             case "left":
@@ -263,12 +263,12 @@ const drawGuides = (obj) => {
                 ln = new fabric.Line(
                     [value, sortedPointArray[0], value, sortedPointArray[sortedPointArray.length - 1]],
                     Object.assign(lineProps, {
-                        stroke: 'blue'
+                        stroke: 'black'
                     })
                 );
                 sortedPointArray.forEach(point => {
-                    marks.push(new fabric.Line([value - markSize, point - markSize, value + markSize, point + markSize],Object.assign(lineProps, { stroke: 'blue' })));
-                    marks.push(new fabric.Line([value - markSize, point + markSize, value + markSize, point - markSize],Object.assign(lineProps, { stroke: 'blue' })));
+                    marks.push(new fabric.Line([value - markSize, point - markSize, value + markSize, point + markSize],Object.assign(lineProps, { stroke: 'black' })));
+                    marks.push(new fabric.Line([value - markSize, point + markSize, value + markSize, point - markSize],Object.assign(lineProps, { stroke: 'black' })));
                 });
                 break;
         }
