@@ -3,6 +3,9 @@ import { fabric } from "fabric";
 
 // initialize fabric canvas and assign to global windows object for debug
 const canvas = (window._canvas = new fabric.Canvas("c", { preserveObjectStacking: true }));
+canvas.setWidth(window.innerWidth);
+canvas.setHeight(window.innerHeight);
+canvas.renderAll();
 
 const sides = ["left", "right", "centerX", "top", "bottom", "centerY"];
 
@@ -10,6 +13,10 @@ const bindEvents = () => {
     canvas.on('mouse:up', onMouseUp);
     canvas.on('object:moving', onObjectMoving);
     canvas.on('selection:cleared', onSelectionCleared);
+}
+
+const getRandomNumber = (min, max) => {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
 const createRect = (left, top, color, width, height) => {
@@ -35,23 +42,38 @@ const createRect = (left, top, color, width, height) => {
     canvas.renderAll();
 }
 
+const onScreenResize = () => {
+    canvas.setHeight(window.innerHeight);
+    canvas.setWidth(window.innerWidth);
+    canvas.renderAll();
+}
+
+const preventBrowserZoom = (event) => {
+    if (event.ctrlKey) {
+        event.preventDefault();
+    }
+}
+
 const init = () => {
     bindEvents();
-    createRect(200, 200, "rgba(0, 0, 255, 1)", 200, 200);
+    createRect(200, 200, "rgba(0, 0, 255, 1)", getRandomNumber(500, 1000), getRandomNumber(500, 1000));
     createRect(
         Math.floor(Math.random() * canvas.width),
         Math.floor(Math.random() * canvas.height),
         "rgba(0, 255, 0, 1)",
-        199,
-        200
+        getRandomNumber(500, 1000),
+        getRandomNumber(500, 1000)
     );
     createRect(
         Math.floor(Math.random() * canvas.width),
         Math.floor(Math.random() * canvas.height),
         "rgba(255, 0, 0, 1)",
-        202,
-        200
+        getRandomNumber(500, 1000),
+        getRandomNumber(500, 1000)
     );
+
+    window.addEventListener('resize', onScreenResize)
+    window.addEventListener('wheel', preventBrowserZoom, { passive: false });
 }
 
 const clearCanvas = () => {
@@ -132,8 +154,8 @@ const snapObject = (obj) => {
             })
         });
     }
-    if(minAbsDiffHorizontal < 10) obj.set("top", newPosHorizontal);
-    if(minAbsDiffVertical < 10) obj.set("left", newPosVertical);
+    if(minAbsDiffHorizontal < 85) obj.set("top", newPosHorizontal);
+    if(minAbsDiffVertical < 85) obj.set("left", newPosVertical);
 
     obj.setCoords();
 }
